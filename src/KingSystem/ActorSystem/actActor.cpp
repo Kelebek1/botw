@@ -3,6 +3,8 @@
 #include "KingSystem/ActorSystem/actAiRoot.h"
 #include "KingSystem/ActorSystem/actBaseProcLink.h"
 #include "KingSystem/ActorSystem/actBaseProcMgr.h"
+#include "KingSystem/Physics/CharacterController/physCharacterController.h"
+#include "KingSystem/Physics/System/physInstanceSet.h"
 
 namespace ksys::act {
 
@@ -79,6 +81,13 @@ int Actor::handleMessage(const Message& message) {
         m107();
         return 1;
     }
+}
+
+const ksys::phys::CharacterController* Actor::sub_71011D7C00() const {
+    if (mPhysics) {
+        return mPhysics->getCharacterController();
+    }
+    return nullptr;
 }
 
 }  // namespace ksys::act

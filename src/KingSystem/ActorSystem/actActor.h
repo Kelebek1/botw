@@ -39,11 +39,11 @@ class UMii;
 }  // namespace mii
 
 namespace phys {
-class StaticCompoundRigidBodyGroup;
+class CharacterController;
 class InstanceSet;
+class StaticCompoundRigidBodyGroup;
 class Reaction;
 class RigidBody;
-class CharacterController;
 }  // namespace phys
 
 namespace res {
@@ -300,6 +300,8 @@ public:
         return offsetof(Actor, mCreatorActorListNode);
     }
 
+    const ksys::phys::CharacterController* sub_71011D7C00() const;
+
 protected:
     friend class ActorCreator;
 
@@ -396,7 +398,7 @@ protected:
     /* 0x560 */ as::ASList* mASList = nullptr;
     /* 0x568 */ xlink::XLink* mXLink = nullptr;
     /* 0x570 */ ActorParam* mActorParam = nullptr;
-    /* 0x578 */ phys::InstanceSet* mPhysics = nullptr;
+    /* 0x578 */ ksys::phys::InstanceSet* mPhysics = nullptr;
     /* 0x580 */ PhysicsConstraints mConstraints;
     /* 0x598 */ void* _598 = nullptr;
     /* 0x5a0 */ BoneControl* mBoneControl = nullptr;

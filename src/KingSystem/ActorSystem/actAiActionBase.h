@@ -124,6 +124,10 @@ public:
 
     virtual ActionBase* getChild(s32 idx) const { return nullptr; }
 
+    bool setDynamicParam(const sead::Vector3f& value, const sead::SafeString& key) const {
+        return setDynamicParamPtrImpl<AIDefParamType::Vec3>(value, key);
+    }
+
 protected:
     enum class Flag : u8 {
         Finished = 1,
@@ -266,6 +270,37 @@ protected:
 
     bool getDynamicParam2(bool** value, const sead::SafeString& key) const {
         return getDynamicParamPtrImpl2<AIDefParamType::Bool>(value, key, getDefaultBool());
+    }
+
+    template <typename T>
+    bool setDynamicParamImpl(const T& value, const sead::SafeString& key,
+                             bool (ParamPack::*setter)(const T& value, const sead::SafeString& key)
+                                 const) const {
+        bool result = false;
+        auto* action = this;
+        while (action->mFlags.isOff(Flag::_80)) {
+            result |= (action->mParams.*setter)(value, key);
+            if (action->mFlags.isOff(Flag::DynamicParamChild)) {
+                goto end;
+            }
+            action = action->getCurrentChild();
+            if (!action) {
+                goto end;
+            }
+        }
+
+        for (s32 i = 0, n = action->getNumChildren(); i < n; ++i) {
+            auto* child = action->getChild(i);
+            result |= child->setDynamicParamImpl<T>(value, key, setter);
+        }
+
+    end:
+        return result & 1;
+    }
+
+    template <AIDefParamType Type, typename T>
+    bool setDynamicParamPtrImpl(const T& value, const sead::SafeString& key) const {
+        return setDynamicParamImpl(value, key, &ParamPack::setPtrGeneric<T, Type>);
     }
 
     Actor* mActor;

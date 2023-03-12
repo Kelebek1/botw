@@ -2,6 +2,7 @@
 
 #include <basis/seadTypes.h>
 #include <container/seadSafeArray.h>
+#include <math/seadVector.h>
 #include <prim/seadSafeString.h>
 #include <prim/seadSizedEnum.h>
 
@@ -82,9 +83,9 @@ public:
         return true;
     }
 
-    template <typename T>
-    bool setAITreeVariable(const sead::SafeString& key, AIDefParamType type, const T& val) const {
-        auto* variable = static_cast<T*>(getAITreeVariablePointer(key, type, true));
+    template <typename T, AIDefParamType Type>
+    bool setAITreeVariable(const sead::SafeString& key, const T& val) const {
+        auto* variable = static_cast<T*>(getAITreeVariablePointer(key, Type, true));
         if (!variable)
             return false;
         *variable = val;
@@ -110,6 +111,11 @@ public:
         auto* ptr = static_cast<T*>(getAITreeVariablePointer(key, Type));
         *value = ptr;
         return ptr != nullptr;
+    }
+
+    template <typename T, AIDefParamType Type>
+    bool setPtrGeneric(const T& value, const sead::SafeString& key) const {
+        return setAITreeVariable<T, Type>(key, value);
     }
 
     bool getString(sead::SafeString* value, const sead::SafeString& key) const;
