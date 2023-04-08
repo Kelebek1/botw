@@ -90,4 +90,11 @@ const ksys::phys::CharacterController* Actor::sub_71011D7C00() const {
     return nullptr;
 }
 
+ksys::phys::CharacterFormSet* Actor::getCharacterFormSet() {
+    if (mPhysics) {
+        return mPhysics->getCharacterFormSet();
+    }
+    return nullptr;
+}
+
 }  // namespace ksys::act

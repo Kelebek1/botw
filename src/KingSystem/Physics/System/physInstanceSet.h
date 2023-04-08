@@ -59,6 +59,7 @@ public:
     const sead::SafeString& getName() const { return mName; }
     const ParamSet* getParamSet() const { return mParamSet; }
     const CharacterController* getCharacterController() const { return mCharacterController; }
+    CharacterFormSet* getCharacterFormSet() { return mCharacterFormSet; }
 
     void setFlag2();
     void clothVisibleStuff();

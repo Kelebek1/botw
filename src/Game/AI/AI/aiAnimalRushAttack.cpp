@@ -30,7 +30,7 @@ bool AnimalRushAttack::init_(sead::Heap* heap) {
 
 void AnimalRushAttack::enter_(ksys::act::ai::InlineParamPack*) {
     const auto* characterController = mActor->sub_71011D7C00();
-    mActor->m45();
+    mActor->getCharacterFormSet();
 
     if (!characterController) {
         setFailed();

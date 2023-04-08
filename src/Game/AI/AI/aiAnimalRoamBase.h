@@ -14,6 +14,9 @@ public:
     void enter_(ksys::act::ai::InlineParamPack* params) override;
     void leave_() override;
     void loadParams_() override;
+    void calc_() override;
+
+    bool m34(f32& a2);
 
 protected:
     // static_param at offset 0x38
@@ -42,6 +45,8 @@ protected:
     float* mFramesStuckOnTerrain_a{};
     // aitree_variable at offset 0x98
     bool* mIsStuckOnTerrain_a{};
+    s32 unk_A0;
+    bool unk_A4;
 };
 
 }  // namespace uking::ai

@@ -1,4 +1,5 @@
 #include "Game/AI/AI/aiAnimalRoamBase.h"
+#include "KingSystem/ActorSystem/actActor.h"
 
 namespace uking::ai {
 
@@ -10,8 +11,15 @@ bool AnimalRoamBase::init_(sead::Heap* heap) {
     return ksys::act::ai::Ai::init_(heap);
 }
 
+extern void sub_7100F7604C(ksys::phys::CharacterFormSet*, f32);
+
 void AnimalRoamBase::enter_(ksys::act::ai::InlineParamPack* params) {
-    ksys::act::ai::Ai::enter_(params);
+    unk_A0 = 0;
+    unk_A4 = true;
+    auto form_set = mActor->getCharacterFormSet();
+    if (form_set) {
+        sub_7100F7604C(form_set, 0.5f);
+    }
 }
 
 void AnimalRoamBase::leave_() {
@@ -33,5 +41,19 @@ void AnimalRoamBase::loadParams_() {
     getAITreeVariable(&mFramesStuckOnTerrain_a, "FramesStuckOnTerrain");
     getAITreeVariable(&mIsStuckOnTerrain_a, "IsStuckOnTerrain");
 }
+
+void AnimalRoamBase::calc_() {
+    ksys::act::ai::Ai::calc_();
+}
+
+bool AnimalRoamBase::m34(f32& a2) {
+    auto form_set = mActor->getCharacterFormSet();
+    if (form_set == nullptr) {
+        return false;
+    }
+
+    return true;
+}
+
 
 }  // namespace uking::ai
