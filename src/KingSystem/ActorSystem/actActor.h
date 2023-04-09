@@ -13,6 +13,7 @@
 #include "KingSystem/ActorSystem/actBaseProc.h"
 #include "KingSystem/ActorSystem/actBaseProcJobHandler.h"
 #include "KingSystem/ActorSystem/actBaseProcLink.h"
+#include "KingSystem/ActorSystem/actModelBindInfo.h"
 #include "KingSystem/ActorSystem/actPhysicsConstraints.h"
 #include "KingSystem/ActorSystem/actPhysicsUserTag.h"
 #include "KingSystem/Map/mapMubinIter.h"
@@ -103,6 +104,7 @@ public:
     };
 
     enum class ActorFlag {
+        _5 = 0x5,
         _18 = 0x18,
         _25 = 0x25,
         _29 = 0x29,
@@ -167,10 +169,10 @@ public:
 
     // FIXME: figure out return types, parameters and names
     virtual s32 getMaxLife();
-    virtual void m31();
-    virtual void m32();
-    virtual void m33();
-    virtual void m34();
+    virtual Actor* m31();
+    virtual Actor* m32();
+    virtual s32 m33();
+    virtual void m34() {}
     virtual void m35();
     virtual void m36();
     virtual void getGuardableAngle();
@@ -298,6 +300,14 @@ public:
 
     static constexpr size_t getCreatorListNodeOffset() {
         return offsetof(Actor, mCreatorActorListNode);
+    }
+
+    BaseProcLink& getfield738() {
+        return _738;
+    }
+
+    constexpr bool isSpecialJobTypesMaskOverrideForThisActor(JobType type) const {
+        return mSpecialJobTypesMaskOverride.isOnBit(int(type));
     }
 
 protected:
@@ -494,6 +504,7 @@ private:
     };
 
     HandleMessageResult doHandleMessage_(const Message& message);
+    s32 getMaxLife_();
 };
 KSYS_CHECK_SIZE_NX150(Actor, 0x840);
 

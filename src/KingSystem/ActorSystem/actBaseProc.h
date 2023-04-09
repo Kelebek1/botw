@@ -142,6 +142,10 @@ public:
     bool isDeleting() const { return mFlags.isOn(Flags::PreDeleteStarted); }
     bool isDeleteRequested() const { return mStateFlags.isOn(StateFlags::RequestDelete); }
 
+    bool isSpecialJobTypeForThisActor(JobType type) const {
+        return isSpecialJobTypeForThisActor_(type);
+    }
+
 protected:
     friend class BaseProcLinkDataMgr;
     friend class BaseProcMgr;

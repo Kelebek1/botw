@@ -3,6 +3,8 @@
 #include "KingSystem/ActorSystem/actAiRoot.h"
 #include "KingSystem/ActorSystem/actBaseProcLink.h"
 #include "KingSystem/ActorSystem/actBaseProcMgr.h"
+#include "KingSystem/Resource/Actor/resResourceGParamList.h"
+#include "KingSystem/Resource/GeneralParamList/resGParamListObjectGeneral.h"
 
 namespace ksys::act {
 
@@ -58,6 +60,37 @@ const char* Actor::getUniqueName() const {
         unique_name = mUniqueName->unique_name->cstr();
 
     return unique_name;
+}
+
+s32 Actor::getMaxLife() {
+    return getMaxLife_();
+}
+
+s32 Actor::getMaxLife_() {
+    auto* paramList = getParam()->getRes().mGParamList;
+    if (!paramList) {
+        return 1;
+    }
+    auto general = paramList->get<ksys::res::GParamListObjType::General>();
+    if (general) {
+        return *general->mLife;
+    }
+    return 1;
+}
+
+Actor* Actor::m31() {
+    if (mActorFlags.isOnBit(ActorFlag::_5) && mModelBindInfo) {
+        return mModelBindInfo->sub_7100D3C5E0(this);
+    }
+    return nullptr;
+}
+
+Actor* Actor::m32() {
+    return m31();
+}
+
+s32 Actor::m33() {
+    return 0;
 }
 
 void Actor::handleAck(const MessageAck& ack) {
