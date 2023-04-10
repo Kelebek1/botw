@@ -10,10 +10,17 @@ public:
     explicit ActorWaterDepthSelect(const InitArg& arg);
     ~ActorWaterDepthSelect() override;
 
+    bool isFailed() const override;
+    bool isFinished() const override;
+    bool isChangeable() const override;
     bool init_(sead::Heap* heap) override;
     void enter_(ksys::act::ai::InlineParamPack* params) override;
     void leave_() override;
     void loadParams_() override;
+    void calc_() override;
+
+    bool isDeep() const;
+    bool isUnderwaterMaybe() const;
 
 protected:
     // static_param at offset 0x38

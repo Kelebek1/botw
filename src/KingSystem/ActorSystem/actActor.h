@@ -300,6 +300,14 @@ public:
         return offsetof(Actor, mCreatorActorListNode);
     }
 
+    const sead::Atomic<bool>& get68f() const {
+        return _68f;
+    }
+
+    float get6f0() const {
+        return _6f0;
+    }
+
 protected:
     friend class ActorCreator;
 
