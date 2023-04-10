@@ -417,4 +417,11 @@ bool acquireActor(BaseProcLink* link, ActorConstDataAccess* accessor) {
     });
 }
 
+const sead::Matrix34f& ActorConstDataAccess::getActorMtx() const {
+    auto* actor = getActor();
+    if (!actor)
+        return sead::Matrix34f::ident;
+    return actor->getMtx();
+}
+
 }  // namespace ksys::act

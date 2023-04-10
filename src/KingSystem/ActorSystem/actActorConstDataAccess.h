@@ -118,7 +118,8 @@ public:
     f32 getHorseMoveRadius() const;
     f32 getHorseAvoidOffset() const;
     bool horseTargetedIsCircularMoveAlways() const;
-
+    const sead::Matrix34f& getActorMtx() const;
+    
 private:
     Actor* getActor() const;
 

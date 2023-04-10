@@ -229,7 +229,7 @@ public:
     virtual void m90();
     virtual void m91();
     virtual void m92();
-    virtual void m93();
+    virtual void m93(s32 a1, f32 a2);
     virtual void m94();
     virtual void m95();
     virtual void m96();
