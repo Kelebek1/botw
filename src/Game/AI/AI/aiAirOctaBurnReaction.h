@@ -1,6 +1,7 @@
 #pragma once
 
 #include "KingSystem/ActorSystem/actAiAi.h"
+#include "Game/AI/AI/aiAirOctaBoardBurn.h"
 
 namespace uking::ai {
 
@@ -14,6 +15,9 @@ public:
     void enter_(ksys::act::ai::InlineParamPack* params) override;
     void leave_() override;
     void loadParams_() override;
+    void calc_() override;
+
+    bool sub_71002FAA64();
 
 protected:
     // static_param at offset 0x38
@@ -25,7 +29,10 @@ protected:
     // static_param at offset 0x50
     const float* mChangeRandTime_s{};
     // aitree_variable at offset 0x58
-    void* mAirOctaDataMgr_a{};
+    AirOctaDataMgr** mAirOctaDataMgr_a{};
+    s64 unk_60{false};
+    f32 unk_68{0.0f};
+    f32 unk_6C{0.0f};
 };
 
 }  // namespace uking::ai
