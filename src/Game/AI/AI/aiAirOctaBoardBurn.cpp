@@ -2,6 +2,7 @@
 #include "KingSystem/ActorSystem/actActor.h"
 #include "KingSystem/ActorSystem/actActorConstDataAccess.h"
 #include "KingSystem/ActorSystem/actAiInlineParam.h"
+#include "Game/AI/AI/aiAirOctaRoot.h"
 
 namespace uking::ai {
 
@@ -14,10 +15,10 @@ bool AirOctaBoardBurn::init_(sead::Heap* heap) {
 }
 
 void AirOctaBoardBurn::enter_(ksys::act::ai::InlineParamPack* params) {
-    auto* data_mgr = sead::DynamicCast<AirOctaDataMgr>(*mAirOctaDataMgr_a);
+    auto* data_mgr = sead::DynamicCast<AirOctaDataMgr>(*(AirOctaDataMgr**)mAirOctaDataMgr_a);
     sead::Vector3f targetPos{sead::Vector3f::zero};
     ksys::act::ActorConstDataAccess accessor;
-    if (data_mgr && ksys::act::acquireActor(&data_mgr->getProc(), &accessor) &&
+    if (data_mgr && ksys::act::acquireActor(&data_mgr->mBaseProcLink2, &accessor) &&
         accessor.hasProc()) {
         auto& mtx = accessor.getActorMtx();
         mtx.getBase(targetPos, 3);

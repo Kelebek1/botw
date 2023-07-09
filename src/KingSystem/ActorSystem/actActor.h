@@ -124,6 +124,10 @@ public:
         _3 = 3,
     };
 
+    enum class DrawDistanceFlag {
+        _1 = 0x1,
+    };
+
     explicit Actor(const CreateArg& arg);
     ~Actor() override;
 
@@ -160,6 +164,9 @@ public:
     void setFlag(ActorFlag flag);
     void setFlag(ActorFlag flag, bool on);
     bool deleteEx(DeleteType type, DeleteReason reason, bool* ok = nullptr);
+    inline void setDrawDistanceFlag(DrawDistanceFlag flag) noexcept {
+        mDrawDistanceFlags.changeBit(static_cast<s32>(flag), true);
+    }
 
     void setProperties(int x, const sead::Matrix34f& mtx, const sead::Vector3f& vel,
                        const sead::Vector3f& ang_vel, const sead::Vector3f& scale,
@@ -300,13 +307,9 @@ public:
         return offsetof(Actor, mCreatorActorListNode);
     }
 
-    const sead::Atomic<bool>& get68f() const {
-        return _68f;
-    }
+    const sead::Atomic<bool>& get68f() const { return _68f; }
 
-    float get6f0() const {
-        return _6f0;
-    }
+    float get6f0() const { return _6f0; }
 
 protected:
     friend class ActorCreator;

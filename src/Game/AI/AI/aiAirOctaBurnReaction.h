@@ -29,7 +29,7 @@ protected:
     // static_param at offset 0x50
     const float* mChangeRandTime_s{};
     // aitree_variable at offset 0x58
-    AirOctaDataMgr** mAirOctaDataMgr_a{};
+    void* mAirOctaDataMgr_a{};
     s64 unk_60{false};
     f32 unk_68{0.0f};
     f32 unk_6C{0.0f};

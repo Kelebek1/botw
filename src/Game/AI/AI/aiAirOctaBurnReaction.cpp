@@ -3,7 +3,7 @@
 #include "Game/AI/AI/aiAirOctaBurnReaction.h"
 #include "KingSystem/ActorSystem/actActorConstDataAccess.h"
 #include "KingSystem/ActorSystem/actAiInlineParam.h"
-#include "Game/AI/AI/aiAirOctaBoardBurn.h"
+#include "Game/AI/AI/aiAirOctaRoot.h"
 
 namespace uking::ai {
 
@@ -22,8 +22,8 @@ void AirOctaBurnReaction::enter_(ksys::act::ai::InlineParamPack* params) {
     bool has_proc;
     {
         ksys::act::ActorConstDataAccess accessor;
-        auto* data_manager = sead::DynamicCast<AirOctaDataMgr>(*mAirOctaDataMgr_a);
-        acquired = ksys::act::acquireActor(&data_manager->getProc(), &accessor);
+        auto* data_manager = sead::DynamicCast<AirOctaDataMgr>(*(AirOctaDataMgr**)mAirOctaDataMgr_a);
+        acquired = ksys::act::acquireActor(&data_manager->mBaseProcLink2, &accessor);
         has_proc = accessor.hasProc();
     }
     if (acquired && has_proc && sub_71002FAA64()) {
