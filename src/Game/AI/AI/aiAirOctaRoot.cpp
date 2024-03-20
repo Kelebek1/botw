@@ -4,6 +4,7 @@
 #include "KingSystem/Map/mapObject.h"
 #include "KingSystem/Map/mapObjectLink.h"
 #include "KingSystem/Utils/Thread/Message.h"
+#include "prim/seadSafeString.h"
 
 namespace act {
 ksys::map::ObjectLink* findLinkReferenceObj(const ksys::act::Actor* actor,
@@ -14,7 +15,7 @@ ksys::map::ObjectLink* findLinkReferenceObj(const ksys::act::Actor* actor,
 namespace uking::ai {
 
 void AirOctaDataMgr::sub_71002FAF84(ksys::act::Actor* actor) {
-    if (unk_120) {
+    if (mFlags & 1) {
         return;
     }
 
@@ -33,37 +34,40 @@ void AirOctaDataMgr::sub_71002FAF84(ksys::act::Actor* actor) {
         ksys::act::ActorConstDataAccess accessor;
         boardLink->getObjectProcWithAccessor(accessor);
         if (accessor.linkAcquire(&mBaseProcLink2)) {
-            auto& actorMtx = actor->getMtx();
-            auto& accessMtx = accessor.getActorMtx();
-            sead::Matrix34<f32> mtx;
-            mtx.setInverse(accessMtx);
+            const auto& actorMtx = actor->getMtx();
+            sead::Vector3f actorW;
+            actorMtx.getBase(actorW,3);
 
-            // f32 x = mtx(0,0) * actorMtx(0,3) + mtx(1,0) * actorMtx(1,3) + mtx(2,0) * actorMtx(2,3) + accessMtx(0,3);
-            // f32 y = mtx(0,1) * actorMtx(0,3) + mtx(1,1) * actorMtx(1,3) + mtx(2,1) * actorMtx(2,3) + accessMtx(1,3);
-            // f32 z = mtx(0,2) * actorMtx(0,3) + mtx(1,2) * actorMtx(1,3) + mtx(2,2) * actorMtx(2,3) + accessMtx(2,3);
-            vec_E0.x = mtx(0,0) * actorMtx(0,3) + mtx(1,0) * actorMtx(1,3) + mtx(2,0) * actorMtx(2,3) + mtx(0,3);
+            sead::Matrix34f mtx;
+            mtx.setInverse(accessor.getActorMtx());
+            
+            f32 x1 = mtx(0,0) * actorW.x;
+            f32 x2 = mtx(1,0) * actorW.y;
+            f32 x3 = mtx(2,0) * actorW.z;
+            f32 y1 = mtx(0,1) * actorW.x;
+            f32 y2 = mtx(1,1) * actorW.y;
+            f32 y3 = mtx(2,1) * actorW.z;
+            f32 z1 = mtx(0,2) * actorW.x;
+            f32 z2 = mtx(1,2) * actorW.y;
+            f32 z3 = mtx(2,2) * actorW.z;
+
             vec_E0.y = 0.0f;
-            vec_E0.z = mtx(0,2) * actorMtx(0,3) + mtx(1,2) * actorMtx(1,3) + mtx(2,2) * actorMtx(2,3) + mtx(2,3);
-            unk_110 =  mtx(0,1) * actorMtx(0,3) + mtx(1,1) * actorMtx(1,3) + mtx(2,1) * actorMtx(2,3) + mtx(1,3);
-            unk_110 += mtx(1, 3);
+            vec_E0.x = x1 + x2 + x3 + actorW.x;
+            vec_E0.z = y1 + y2 + y3 + actorW.z;
+
+            unk_110 = z1 + z2 + z3 + actorW.y;
         }
     }
 
-    auto& actorMtx = actor->getMtx();
-    actorMtx.getBase(vec_F8, 3);
-    f32 y_tmp = actorMtx(1, 3) - unk_110;
+    actor->getMtx().getBase(vec_F8, 3);
+    vec_EC = vec_F8;
+    vec_EC.y -= unk_110;
+    sub_71002FB17C();
+    mFlags |= 1;
+}
 
-    vec_F8.y = y_tmp;
-    // vec_F8.x = actorMtx(0, 3);
-    // vec_F8.y = actorMtx(1, 3) - unk_110;
-    // vec_F8.z = actorMtx(2, 3);
-    actorMtx.getBase(vec_EC, 3);
-
-    //vec_EC.x = actorMtx(0, 3);
-    vec_EC.y = y_tmp + unk_110 + unk_114 + unk_118 + unk_11C;
-    //vec_EC.z = actorMtx(2, 3);
-
-    unk_120 |= 1;
+void AirOctaDataMgr::sub_71002FB17C() {
+    vec_F8.y = vec_EC.y + unk_110 + unk_114 + unk_118 + unk_11C;
 }
 
 AirOctaRoot::AirOctaRoot(const InitArg& arg) : Fork2AI(arg) {}

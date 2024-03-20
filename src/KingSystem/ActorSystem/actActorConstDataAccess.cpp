@@ -13,6 +13,9 @@
 #include "KingSystem/Resource/GeneralParamList/resGParamListObjectSystem.h"
 
 namespace ksys::act {
+namespace {
+MesTransceiverId sDefaultTransceiverId{};
+}
 
 static BaseProc* getProcIfActor(BaseProc* proc) {
     if (proc && sead::IsDerivedFrom<Actor>(proc))
@@ -52,6 +55,16 @@ bool ActorConstDataAccess::linkAcquireImmediately(BaseProcLink* link) const {
 
     link->reset();
     return false;
+}
+
+const MesTransceiverId* ActorConstDataAccess::getMessageTransceiverId() const {
+    auto* proc = getActor();
+    if (proc) {
+        if (!proc->checkFlag(Actor::ActorFlag::_2e)) {
+            return proc->getMesTransceiverId();
+        }
+    }
+    return &sDefaultTransceiverId;
 }
 
 bool ActorConstDataAccess::isPlayerProfile() const {

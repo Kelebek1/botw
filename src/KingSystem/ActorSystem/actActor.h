@@ -138,6 +138,7 @@ public:
     const char* getUniqueName() const;
 
     ai::RootAi* getRootAi() const { return mRootAi; }
+    as::ASList* getASList() const { return mASList; }
     const ActorParam* getParam() const { return mActorParam; }
     map::Object* getMapObject() const { return mMapObject; }
     const map::MubinIter& getMapObjIter() const { return mMapObjIter; }
@@ -150,6 +151,8 @@ public:
     phys::RigidBody* getTgtBody() const { return mTgtBody; }
 
     const MesTransceiverId* getMesTransceiverId() const { return mMsgTransceiver.getId(); }
+    void sendMessage(const MesTransceiverId& dest, const MessageType& type, void* user_data,
+                    bool ack);
 
     f32 getDeleteDistance() const {
         return sead::Mathf::sqrt(sead::Mathf::clampMin(mDeleteDistanceSq, 0.0f));

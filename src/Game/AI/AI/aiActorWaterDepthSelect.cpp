@@ -23,17 +23,8 @@ bool ActorWaterDepthSelect::init_(sead::Heap* heap) {
     return ksys::act::ai::Ai::init_(heap);
 }
 
-bool ActorWaterDepthSelect::isDeep() const {
-    auto y_w = mActor->getMtx()(1, 3);
-    return mActor->get6f0() - y_w > *mDeepDepth_s;
-}
-
-bool ActorWaterDepthSelect::isUnderwaterMaybe() const {
-    return *mDeepDepth_s > 0.0f && mActor->get68f();
-}
-
 void ActorWaterDepthSelect::enter_(ksys::act::ai::InlineParamPack* params) {
-    if (isUnderwaterMaybe() && isDeep()) {
+    if (isUnderwater() && isDeep()) {
         changeChild("深瀬", params);
     } else {
         changeChild("浅瀬", params);
@@ -55,32 +46,31 @@ void ActorWaterDepthSelect::calc_() {
         return;
     }
 
-    auto is_deep = false;
-    if (isUnderwaterMaybe()) {
-        is_deep = isDeep();
-        if (*mForceDeepChange_s && is_deep) {
+    auto is_deep = isUnderwater() && isDeep();
+    if (*mForceDeepChange_s && is_deep) {
+        if (!isCurrentChild("深瀬")) {
+            return changeChild("深瀬");
+        }
+    }
+
+    if (getCurrentChild()->isChangeable()) {
+        if (is_deep) {
             if (!isCurrentChild("深瀬")) {
                 changeChild("深瀬");
-                return;
             }
+        } else if (!isCurrentChild("浅瀬")) {
+            changeChild("浅瀬");
         }
     }
+}
 
-    if (!getCurrentChild()->isChangeable()) {
-        return;
-    }
+bool ActorWaterDepthSelect::isUnderwater() const {
+    return *mDeepDepth_s > 0.0f && mActor->get68f();
+}
 
-    if (is_deep) {
-        if (isCurrentChild("深瀬")) {
-            return;
-        }
-        changeChild("深瀬");
-    } else {
-        if (isCurrentChild("浅瀬")) {
-            return;
-        }
-        changeChild("浅瀬");
-    }
+bool ActorWaterDepthSelect::isDeep() const {
+    auto y_w = mActor->getMtx()(1, 3);
+    return mActor->get6f0() - y_w > *mDeepDepth_s;
 }
 
 }  // namespace uking::ai

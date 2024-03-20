@@ -7,6 +7,7 @@
 #include "KingSystem/ActorSystem/actBaseProc.h"
 #include "KingSystem/ActorSystem/actBaseProcLink.h"
 #include "KingSystem/Utils/Types.h"
+#include "KingSystem/Utils/Thread/MessageTransceiverId.h"
 
 namespace ksys::map {
 class Object;
@@ -45,6 +46,7 @@ public:
 
     bool linkAcquire(BaseProcLink* link) const;
     bool linkAcquireImmediately(BaseProcLink* link) const;
+    const MesTransceiverId* getMessageTransceiverId() const;
 
     void debugLog(s32, const sead::SafeString& method_name) const;
 

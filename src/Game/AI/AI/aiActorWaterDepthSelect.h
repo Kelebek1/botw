@@ -19,9 +19,6 @@ public:
     void loadParams_() override;
     void calc_() override;
 
-    bool isDeep() const;
-    bool isUnderwaterMaybe() const;
-
 protected:
     // static_param at offset 0x38
     const float* mDeepDepth_s{};
@@ -29,6 +26,10 @@ protected:
     const bool* mOnEnterOnly_s{};
     // static_param at offset 0x48
     const bool* mForceDeepChange_s{};
+
+private:
+    bool isUnderwater() const;
+    bool isDeep() const;
 };
 
 }  // namespace uking::ai
